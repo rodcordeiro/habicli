@@ -8,10 +8,14 @@ const updateNotifier = require('update-notifier');
 
 updateNotifier({pkg}).notify();
 
+const auth = require("./commands/auth");
+
+program.addCommand(auth)
+
 program
     .version(pkg.version,"-v,--version","Shows program version")
     .allowUnknownOption(false)
-    .allowExcessArguments(false);
+    .allowExcessArguments(false)
 
 
 program.parse(process.argv);
