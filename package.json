@@ -7,7 +7,10 @@
     "type": "git",
     "url": "git+https://github.com/rodcordeiro/habicli.git"
   },
-  "bugs": {
+  "bin": {
+    "habicli": "./src/cli.js"
+  },
+    "bugs": {
     "url": "https://github.com/rodcordeiro/habicli/issues"
   },
   "homepage": "https://github.com/rodcordeiro/habicli#readme",
@@ -27,7 +30,7 @@
     "chalk": "^4.1.1",
     "cli-table": "^0.3.6",
     "commander": "^8.0.0",
-    "configstore": "^6.0.0",
+    "configstore": "^5.0.1",
     "figlet": "^1.5.0",
     "inquirer": "^8.1.2",
     "ora": "^5.4.1",
