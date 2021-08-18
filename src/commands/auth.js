@@ -69,21 +69,21 @@ auth.command("stats")
     .action(async()=>{
         spinner.start("Asking the oracle for the provisions...\n")
         const headers = config.get("api")
-        const data = await api.get("/user",{},{headers:{
-            'x-client':headers['x-client'],
-            'x-api-key':headers['x-api-key'],
-            'x-api-user':headers['x-api-user'],
-        }})
-            .then(response=>{
-                spinner.text = "Receiving the prophecies"
-                return response.data.data
-            })
-            .catch(err=>{
-                // console.log(err)
-                spinner.fail(chalk.redBright(`Oh no, lost connection. Last thing I saw was...\n${err}`))
-                throw new Error(err)
-            })
-        spinner.succeed(`Got it, the oracle tolde me!\n${data}`)
+        // const data = await api.get("/user",{},{headers:{
+        //     'x-client':headers['x-client'],
+        //     'x-api-key':headers['x-api-key'],
+        //     'x-api-user':headers['x-api-user'],
+        // }})
+        //     .then(response=>{
+        //         spinner.text = "Receiving the prophecies"
+        //         return response.data.data
+        //     })
+        //     .catch(err=>{
+        //         // console.log(err)
+        //         spinner.fail(chalk.redBright(`Oh no, lost connection. Last thing I saw was...\n${err}`))
+        //         throw new Error(err)
+        //     })
+        spinner.succeed(`Got it, the oracle tolde me!\n`)
         spinner.stop()
         // {party,stats,profile,guilds,challenges}
     })
