@@ -10,7 +10,10 @@
   "bin": {
     "habicli": "./src/cli.js"
   },
-    "bugs": {
+  "scripts": {
+    "dev": "ts-node ./src/cli.ts"
+  },
+  "bugs": {
     "url": "https://github.com/rodcordeiro/habicli/issues"
   },
   "homepage": "https://github.com/rodcordeiro/habicli#readme",

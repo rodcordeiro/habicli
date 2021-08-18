@@ -46,8 +46,7 @@ const Todo = new Command('todo')
             message: 'Choose a task',
             choices: tasks.map(task=>{
                 return task.text
-            }),
-                       
+            })                       
         }])
         const task = tasks.filter(task=>task.text == choose.task)[0]
         console.log(task)
