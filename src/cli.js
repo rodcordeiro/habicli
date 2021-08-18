@@ -9,13 +9,17 @@ const updateNotifier = require('update-notifier');
 updateNotifier({pkg}).notify();
 
 const auth = require("./commands/auth");
+const Todo = require("./commands/Todos");
 
 program.addCommand(auth)
+program.addCommand(Todo)
 
 program
     .version(pkg.version,"-v,--version","Shows program version")
     .allowUnknownOption(false)
     .allowExcessArguments(false)
 
+// const config = require(join(__dirname,".","tools","config.js"));
+// console.log(config.get())
 
 program.parse(process.argv);

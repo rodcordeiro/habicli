@@ -23,11 +23,11 @@ auth
             {
                 type: 'input',
                 name: 'username',
-                message: 'Please type your username',
+                message: 'Please type your username: ',
                 validate: value => value ? true : 'Please enter your name'
             }
         ])
-    const { password } = await inquirer.prompt([
+        const { password } = await inquirer.prompt([
             {
                 type: 'password',
                 name: 'password',
@@ -35,7 +35,7 @@ auth
                 validate: value => value ? true : 'You must enter your password'
             }
         ])
-        spinner.start("Connecting to API")
+        spinner.start("Asking the oracle for the provisions...\n")
         const {id,apiToken} = await api.post("/user/auth/local/login",{
             username,
             password
@@ -43,13 +43,13 @@ auth
             'Content-Type': 'application/json'
         })
         .then(res=>{
-            spinner.text = "Validating data"
-            console.log({data:res.data})
+            spinner.text = "Oh, look, the stars recognized you! Let me read what they say, just a moment."
             return res.data.data
         })
         .catch(err=>{
             console.log({err})
-            spinner.fail(chalk.redBright(err))
+            spinner.fail(chalk.redBright(`Oh no. It seems a cloud is over the stars, I cannot see them clearly.\n The last thing I saw was ...\n\n${err}`))
+            throw new Error(err)
         })
         
         let api_config = config.get("api")
@@ -59,7 +59,7 @@ auth
         await config.set({user:{username,id}})
         await config.set({api: api_config})
         
-        spinner.succeed("Connected")
+        spinner.succeed(`Oh yeah, welcome ${username}. Come in, take a sit. It's a pleasure work with you.`)
         spinner.stop()
     })
     
@@ -67,25 +67,31 @@ auth.command("stats")
     .description("Retrieves user information")
     .helpOption("-h,--help","Retrieves user information through API.")
     .action(async()=>{
-        spinner.start("Asking the oracle for the provisions...\n")
-        const headers = config.get("api")
-        // const data = await api.get("/user",{},{headers:{
-        //     'x-client':headers['x-client'],
-        //     'x-api-key':headers['x-api-key'],
-        //     'x-api-user':headers['x-api-user'],
-        // }})
-        //     .then(response=>{
-        //         spinner.text = "Receiving the prophecies"
-        //         return response.data.data
-        //     })
-        //     .catch(err=>{
-        //         // console.log(err)
-        //         spinner.fail(chalk.redBright(`Oh no, lost connection. Last thing I saw was...\n${err}`))
-        //         throw new Error(err)
-        //     })
-        spinner.succeed(`Got it, the oracle tolde me!\n`)
-        spinner.stop()
-        // {party,stats,profile,guilds,challenges}
-    })
+        if(!config.get('user')){
+            console.log(chalk.cyanBright("Oh, wait. I don't know you yet. Please, login first with the command bellow"))
+            console.log()
+            console.log(chalk.greenBright("  habicli auth login   "))
+            console.log()
+            return;
+        } else {
+            spinner.start("Asking the oracle for the provisions...\n")
+            const headers = config.get("api")
+            const {party,stats,profile,guilds,challenges} = await api.get('/user',{
+                headers
+            })
+            .then(response=>{
+                return response.data.data
+            })
+            .catch(err=>{
+                console.log(chalk.redBright("Oh no, lost connection. The last thing I saw was..."))
+                console.error(err)
+            })
+            
+            spinner.succeed(`Got it, the oracle tolde me!\n`)
+            spinner.stop()
+            console.log(`Your HP is ${Math.floor(stats.hp)}/${stats.maxHealth}`)
+            // {party,stats,profile,guilds,challenges}
+        }
+})
 
 module.exports = auth;
