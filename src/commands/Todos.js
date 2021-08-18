@@ -65,8 +65,22 @@ const Todo = new Command('todo')
             const task = tasks.filter(task=>task.text == choose.task)[0]
         const message = `   Name :${task.text}\n\nDescription: ${task.notes}`
         console.log(chalk.cyanBright(message))
-        }
         
+        const action = await inquirer.prompt([{
+                type: 'list',
+                name: 'action',
+                message: 'What are we going to do?',
+                choices: [
+                    "Show checklist",
+                    "Complete",
+                    "Return",
+                    "Close"
+                ]                
+            }])
+
+    
+    
+    }        
     })
 
 
