@@ -87,7 +87,7 @@ auth.command("stats")
                 console.error(err)
             })
             
-            spinner.succeed(`Got it ${profile.username}, the oracle tolde me!\n`)
+            spinner.succeed(`Got it ${profile.sname}, the oracle tolde me!\n`)
             spinner.stop()
             console.log(`Your HP is ${Math.floor(stats.hp)}/${stats.maxHealth}`)
             // {party,stats,profile,guilds,challenges}
