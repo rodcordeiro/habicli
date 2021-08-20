@@ -36,7 +36,7 @@ async function completeChecklistItem(task_id,item_id,headers){
 async function listTasks(headers){
     return new Promise(async(resolve,reject)=>{
         let tasks = [];
-        await api.get("/tasks/user?type=todos",{
+        await api.get("/tasks/user?type=habits",{
             headers
         })
             .then(response=>{
@@ -57,7 +57,7 @@ async function listTasks(headers){
     })
 }
 
-const Todo = new Command('todo')
+const Habit = new Command('habit')
     .helpOption("-h,--help","User functionallity")
     .description("Todoenticate, show user status and logoff from API")
     .helpOption("-h,--help","Login to habitica API")
@@ -164,4 +164,4 @@ const Todo = new Command('todo')
     })
 
 
-module.exports = Todo
+module.exports = Habit
