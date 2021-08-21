@@ -10,9 +10,11 @@ updateNotifier({pkg}).notify();
 
 const auth = require("./commands/auth");
 const Todo = require("./commands/Todos");
+const Habit = require("./commands/Habits");
 
 program.addCommand(auth)
 program.addCommand(Todo)
+// program.addCommand(Habit)
 
 program
     .version(pkg.version,"-v,--version","Shows program version")
