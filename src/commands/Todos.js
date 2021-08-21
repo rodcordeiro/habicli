@@ -7,15 +7,21 @@ const config = require(join(__dirname,"..","tools","config.js"));
 const Spinner = require(join(__dirname,"..","tools","loader.js"));
 
 const spinner = new Spinner();
+const lineBreak = "-------------------------------------------------------------"
 
 async function complete(id,headers){
     return new Promise(async(resolve,reject)=>{
         await api.post("/tasks/b322a291-87c4-490e-8bf6-2b7087538929/score/up",{},{
             headers
             })
+            .then(response=>{
+                resolve(response.data.data)
+            })
+            .catch(err=>{
+                reject(err)
+            })
     })
 }
-
 const Todo = new Command('todo')
     .helpOption("-h,--help","User functionallity")
     .description("Todoenticate, show user status and logoff from API")
@@ -62,7 +68,10 @@ const Todo = new Command('todo')
                     return task.text
                 })                       
             }])
+        
+            console.clear()
             const task = tasks.filter(task=>task.text == choose.task)[0]
+            
         const message = `   Name :${task.text}\n\nDescription: ${task.notes}`
         console.log(chalk.cyanBright(message))
         
