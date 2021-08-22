@@ -6,9 +6,8 @@ const chalk = require("chalk");
 const pkg = require(join(__dirname, "..",'package.json'));
 const updateNotifier = require('update-notifier');
 const notifier = updateNotifier({pkg,shouldNotifyInNpmScript : true})
-console.log(notifier)
-notifier.fetchInfo().then(response=>{
-    
+
+notifier.fetchInfo().then(response=>{    
     notifier.notify();    
 })
 
