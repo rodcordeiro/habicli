@@ -5,23 +5,23 @@ const { join } = require('path');
 const chalk = require("chalk");
 const pkg = require(join(__dirname, "..",'package.json'));
 const updateNotifier = require('update-notifier');
+const notifier = updateNotifier({pkg,shouldNotifyInNpmScript : true})
+console.log(notifier)
+notifier.fetchInfo().then(response=>{
+    
+    notifier.notify();    
+})
 
-updateNotifier({pkg}).notify();
 
 const auth = require("./commands/auth");
 const Todo = require("./commands/Todos");
-const Habit = require("./commands/Habits");
 
 program.addCommand(auth)
 program.addCommand(Todo)
-// program.addCommand(Habit)
 
 program
     .version(pkg.version,"-v,--version","Shows program version")
     .allowUnknownOption(false)
     .allowExcessArguments(false)
-
-// const config = require(join(__dirname,".","tools","config.js"));
-// console.log(config.get())
 
 program.parse(process.argv);
