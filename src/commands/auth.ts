@@ -19,6 +19,8 @@ auth
     .helpOption("-h,--help","Login to habitica API")
     .option("-u,--username [username]","Username to pe used")
     .action(async(options)=>{
+        
+        
         const { username } = options.username ? options : await inquirer.prompt([
             {
                 type: 'input',
