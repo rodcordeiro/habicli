@@ -4,7 +4,7 @@
 
  ### Install
  ```shell
-    npm install habicli
+    npm install -g habicli
  ```
  ---
  ### Usage

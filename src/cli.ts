@@ -6,7 +6,9 @@ import { readFileSync } from 'fs';
 import { UpdateNotifier } from 'update-notifier';
 
 import auth from './commands/auth'
-import Todo from './commands/Todos'
+import {Todo} from './commands/Todos'
+import { Dailies } from './commands/dailies'
+
 const pkg = JSON.parse(readFileSync(resolve(__dirname,'../package.json'),'utf8'))
 
 const notifier = new UpdateNotifier({pkg,shouldNotifyInNpmScript : true})
@@ -19,6 +21,7 @@ const cli = program.program
 
 cli.addCommand(auth)
 cli.addCommand(Todo)
+cli.addCommand(Dailies)
 
 
 

@@ -1,6 +1,6 @@
 {
   "name": "habicli",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "A CLI for [Habitica](https://habitica.com/)",
   "main": "./src/cli.js",
   "repository": {
@@ -16,7 +16,8 @@
   "scripts": {
     "start": "node ./bin/cli.js",
     "dev": "npx ts-node ./src/cli.ts",
-    "build": "npx tsc -b"
+    "build": "npx tsc -b",
+    "prepack":  "npm run build"
   },
   "bugs": {
     "url": "https://github.com/rodcordeiro/habicli/issues"
