@@ -10,9 +10,6 @@
   "bin": {
     "habicli": "./bin/cli.js"
   },
-  "includes":[
-    "./bin"
-  ],
   "scripts": {
     "start": "node ./bin/cli.js",
     "dev": "npx ts-node ./src/cli.ts",
