@@ -1,8 +1,8 @@
-const Configstore = require('configstore');
-const Path = require('path');
-const fs = require('fs');
+import Configstore from 'configstore'
+import { resolve } from 'path';
+import { readFileSync } from 'fs';
 
-const pkg = JSON.parse(fs.readFileSync(Path.resolve(__dirname,"..","..",'package.json'), 'utf8'));
+const pkg = JSON.parse(readFileSync(resolve(__dirname,'..','..','package.json'),'utf8'))
 
 // Create a Configstore instance.
 const config = new Configstore(pkg.name,{
@@ -13,4 +13,4 @@ const config = new Configstore(pkg.name,{
     }
 });
 
-module.exports = config
+export default config

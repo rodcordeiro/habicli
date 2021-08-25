@@ -1,22 +1,43 @@
-const { Command } = require('commander');
-const inquirer = require('inquirer');
-const chalk = require("chalk");
-const { join } = require('path');
-const { exit } = require('process');
-const api = require(join(__dirname,"..","tools","api.js"));
-const config = require(join(__dirname,"..","tools","config.js"));
-const Spinner = require(join(__dirname,"..","tools","loader.js"));
+import { Command } from 'commander';
+import inquirer from 'inquirer'
+import chalk from 'chalk'
+import { join } from 'path';
+import api from '../tools/api';
+import config from '../tools/config';
+import Spinner from '../tools/loader';
+import { exit } from 'process';
 
-const spinner = new Spinner();
+const spinner = new Spinner().spinner;
+
 const lineBreak = ()=> console.log('________________________________________________________\n')
-const PRIORITIES = {
-    Trivial: 0.1,
-    Easy:1,
-    Medium:1.5,
-    Hard:2
+
+enum PRIORITIES{
+    Trivial= 0.1,
+    Easy=1,
+    Medium=1.5,
+    Hard=2
 }
 
-async function complete(id,headers){
+interface iTask{
+    text :string
+    id ?:string
+    notes:string
+    checklist:Array<{
+        id: string;
+        text: string;
+        completed: boolean;
+    }>
+    tags: Array<iTag>
+    priority?: PRIORITIES
+    completed:boolean
+    type: string
+}
+
+interface iTag{
+    id: string;
+    name: string;
+}
+async function complete(id: string | undefined,headers: Object){
     return new Promise(async(resolve,reject)=>{
         await api.post(`/tasks/${id}/score/up`,{},{
             headers
@@ -27,7 +48,7 @@ async function complete(id,headers){
             .catch(err=>reject(err))
     })
 }
-async function getTags(headers){
+async function getTags(headers: Object){
     return new Promise(async(resolve,reject)=>{
         await api.get(`/tags`,{
             headers
@@ -38,7 +59,7 @@ async function getTags(headers){
             .catch(err=>reject(err))
     })
 }
-async function completeChecklistItem(task_id,item_id,headers){
+async function completeChecklistItem(task_id: string | undefined,item_id: string,headers: Object){
     return new Promise(async(resolve,reject)=>{
         await api.post(`/tasks/${task_id}/checklist/${item_id}/score`,{},{
             headers
@@ -50,20 +71,24 @@ async function completeChecklistItem(task_id,item_id,headers){
     })
 }
 
-async function listTasks(headers){
+async function listTasks(headers: Object) : Promise<Array<iTask> | Error>{
     return new Promise(async(resolve,reject)=>{
-        let tasks = [];
+        let tasks : Array<iTask>= [];
         await api.get("/tasks/user?type=todos",{
             headers
         })
-            .then(response=>{
-                response.data.data.map(task=>{
+            .then(async (response: any)=>{
+                const uTags : any = await getTags(headers)
+                response.data.data.map((task: any)=>{
+
                     tasks.push({
                         text:task.text,
                         id:task.id,
                         notes:task.notes,
                         checklist:task.checklist,
-                        completed:task.completed
+                        completed:task.completed,
+                        tags:task.tags.map((tag: string)=>uTags.filter((t: iTag)=>t.id == tag)[0]),
+                        type: task.type
                     })
                 })
 
@@ -91,7 +116,7 @@ const Todo = new Command('todo')
             spinner.stop();
             return;
         } else {
-            let tasks = await listTasks(headers)
+            let tasks : any = await listTasks(headers)
                         .then(response=>{
                             spinner.succeed("Here they're. Please choose one");
                             return response
@@ -104,18 +129,20 @@ const Todo = new Command('todo')
                 type: 'list',
                 name: 'task',
                 message: 'Choose a task',
-                choices: tasks.map(task=>{
+                choices: tasks.map((task: iTask)=>{
                     return task.text
                 })                       
             }])
             
-            const task = tasks.filter(task=>task.text == choose.task)[0]
+            const task : iTask = tasks.filter((task: iTask)=>task.text == choose.task)[0]
             
             let message = `  ### ${task.text} ###`
             if (task.notes) message += `\n${task.notes}`
+            
             lineBreak()
             console.log(chalk.cyanBright(message))
             lineBreak()
+            
             const action_choices = [
                 "Complete",
                 "Update",
@@ -124,6 +151,7 @@ const Todo = new Command('todo')
             if(task.checklist.length >= 1){
                 action_choices.push("Show checklist")
             }
+            
             const action = await inquirer.prompt([{
                 type: 'list',
                 name: 'action',
@@ -198,6 +226,17 @@ const Todo = new Command('todo')
                     console.log(chalk.cyanBright("Task completed"))
                     break;
                 case "Update":
+                    const { choice } = await inquirer.prompt([{
+                        type:'list',
+                        name:'choice',
+                        message: "What do you want to upadate?",
+                        choices: [
+                            'title',
+                            'notes',
+                            'tags',
+                            'checklist'
+                        ]
+                    }])
                         task['text'] = await inquirer.prompt([{
                             type: 'string',
                             name: 'text',
@@ -210,16 +249,16 @@ const Todo = new Command('todo')
                             message: "Update task notes?",
                             default: task.notes
                         }]).then(response=>response.notes)
-                        let tags = await getTags(headers)
+                        let tags : any = await getTags(headers)
                         tags.push({name:"Empty"})
                         await inquirer.prompt([{
                             type: 'list',
                             name: 'tag',
                             message: "Add tags: ",
-                            choices: tags.map(tag=>tag.name)
+                            choices: tags.map((tag: iTag)=>tag.name)
                         }]).then(async (response)=>{
                             if(response.tag != 'Empty'){
-                                let tag = tags.filter(t=>t.name == response.tag)[0]
+                                let tag = tags.filter((t: iTag)=>t.name == response.tag)[0]
                                 await api.post(`/tasks/${task.id}/tags/${tag.id}`,{},{headers}).catch(err=>console.log(chalk.redBright(err)))
                             }
                         })
@@ -279,7 +318,7 @@ const {title} = options.title ? options : await inquirer.prompt([{
         choices: ["Trivial", "Easy", 'Medium', 'Hard'],
     }])
     spinner.start("Asking the oracle for the provisions...\n")
-    const task = {
+    let task : any = {
         type: 'todo'
     }
     
@@ -301,4 +340,4 @@ const {title} = options.title ? options : await inquirer.prompt([{
     spinner.stop()
 }
 })
-module.exports = Todo
+export default Todo

@@ -1,12 +1,12 @@
-const { Command } = require('commander');
-const inquirer = require('inquirer');
-const chalk = require("chalk");
-const { join } = require('path');
-const api = require(join(__dirname,"..","tools","api.js"));
-const config = require(join(__dirname,"..","tools","config.js"));
-const Spinner = require(join(__dirname,"..","tools","loader.js"));
+import { Command } from 'commander';
+import inquirer from 'inquirer'
+import chalk from 'chalk'
+import { join } from 'path';
+import api from '../tools/api';
+import config from '../tools/config';
+import Spinner from '../tools/loader';
 
-const spinner = new Spinner();
+const spinner = new Spinner().spinner;
 
 const auth = new Command('auth')
 auth.helpOption("-h,--help","User functionallity")
@@ -40,7 +40,9 @@ auth
             username,
             password
         },{
-            'Content-Type': 'application/json'
+            headers:{
+                "Content-Type": "application/json"
+            }
         })
         .then(res=>{
             spinner.text = "Oh, look, the stars recognized you! Let me read what they say, just a moment."
@@ -87,11 +89,11 @@ auth.command("stats")
                 console.error(err)
             })
             
-            spinner.succeed(`Got it ${profile.name}, the oracle tolde me!\n`)
+            spinner.succeed(`Got it ${profile.name}, the oracle told me!\n`)
             spinner.stop()
             console.log(`Your HP is ${Math.floor(stats.hp)}/${stats.maxHealth}`)
             // {party,stats,profile,guilds,challenges}
         }
 })
 
-module.exports = auth;
+export default auth
