@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var configstore_1 = __importDefault(require("configstore"));
 var path_1 = require("path");
 var fs_1 = require("fs");
-var pkg = JSON.parse(fs_1.readFileSync(path_1.resolve(__dirname, '../package.json'), 'utf8'));
+var pkg = JSON.parse(fs_1.readFileSync(path_1.resolve(__dirname, '..', '..', 'package.json'), 'utf8'));
 // Create a Configstore instance.
 var config = new configstore_1.default(pkg.name, {
     version: pkg.version,

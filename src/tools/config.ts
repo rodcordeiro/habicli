@@ -1,8 +1,8 @@
 import Configstore from 'configstore'
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 import { readFileSync } from 'fs';
 
-const pkg = JSON.parse(readFileSync(resolve(__dirname,'../package.json'),'utf8'))
+const pkg = JSON.parse(readFileSync(resolve(__dirname,'..','..','package.json'),'utf8'))
 
 // Create a Configstore instance.
 const config = new Configstore(pkg.name,{

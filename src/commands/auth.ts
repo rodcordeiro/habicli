@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import inquirer,{} from 'inquirer'
+import inquirer from 'inquirer'
 import chalk from 'chalk'
 import { join } from 'path';
 import api from '../tools/api';
@@ -89,7 +89,7 @@ auth.command("stats")
                 console.error(err)
             })
             
-            spinner.succeed(`Got it ${profile.name}, the oracle tolde me!\n`)
+            spinner.succeed(`Got it ${profile.name}, the oracle told me!\n`)
             spinner.stop()
             console.log(`Your HP is ${Math.floor(stats.hp)}/${stats.maxHealth}`)
             // {party,stats,profile,guilds,challenges}

@@ -11,8 +11,8 @@
     "habicli": "./bin/cli.js"
   },
   "scripts": {
-    "dev": "npx ts-node ./src/cli.ts",
     "start": "node ./bin/cli.js",
+    "dev": "npx ts-node ./src/cli.ts",
     "build": "npx tsc -b"
   },
   "bugs": {
