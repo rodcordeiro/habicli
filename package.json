@@ -1,6 +1,6 @@
 {
   "name": "habicli",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "A CLI for [Habitica](https://habitica.com/)",
   "main": "./src/cli.js",
   "repository": {
@@ -10,6 +10,9 @@
   "bin": {
     "habicli": "./bin/cli.js"
   },
+  "files":[
+    "bin/**/**"
+  ],
   "scripts": {
     "start": "node ./bin/cli.js",
     "dev": "npx ts-node ./src/cli.ts",
