@@ -146,6 +146,7 @@ const Todo = new Command('todo')
             const action_choices = [
                 "Complete",
                 "Update",
+                "Delete",
                 "Close"
             ]
             if(task.checklist.length >= 1){
@@ -182,6 +183,7 @@ const Todo = new Command('todo')
                         choices: [
                             "Complete",
                             "Update",
+                            "Delete",
                             "Exit"
                         ]
                     }]).then(act=>{
@@ -197,7 +199,6 @@ const Todo = new Command('todo')
                             })
                     }
                     if(item_action == "Update"){
-                        lineBreak()
                         let {text} = await inquirer.prompt([{
                             type: 'string',
                             name: 'text',
@@ -206,6 +207,15 @@ const Todo = new Command('todo')
                         await api.put(`/tasks/${task.id}/checklist/${item.id}`,{
                             text
                         },{headers})
+                        .then(response=>{
+                            console.log(chalk.cyanBright("Updated"))
+                        })
+                        .catch(err=>{
+                            console.log(chalk.redBright(err))
+                        })
+                    }
+                    if(item_action == "Delete"){
+                        await api.delete(`/tasks/${task.id}/checklist/${item.id}`,{headers})
                         .then(response=>{
                             console.log(chalk.cyanBright("Updated"))
                         })
@@ -225,52 +235,128 @@ const Todo = new Command('todo')
                         })
                     console.log(chalk.cyanBright("Task completed"))
                     break;
+                case "Delete":
+                    await api.delete(`/tasks/${task.id}`,{headers})
+                        .then(response=>{
+                            console.log(chalk.cyanBright("Task deleted"))
+                        })
+                        .catch(error=>{
+                            console.log(chalk.redBright(error))
+                        })
+                    break;
                 case "Update":
                     const { choice } = await inquirer.prompt([{
                         type:'list',
                         name:'choice',
                         message: "What do you want to upadate?",
                         choices: [
-                            'title',
-                            'notes',
-                            'tags',
-                            'checklist'
+                            'Title',
+                            'Notes',
+                            'Tags',
+                            'Add checklist item'
                         ]
                     }])
-                        task['text'] = await inquirer.prompt([{
+                    if(choice == 'Title'){
+                        const text = await inquirer.prompt([{
                             type: 'string',
                             name: 'text',
-                            message: "Update task text?",
+                            message: "Type the new task title:",
                             default: task.text
                         }]).then(response=>response.text)
-                        task['notes'] = await inquirer.prompt([{
-                            type: 'string',
-                            name: 'notes',
-                            message: "Update task notes?",
-                            default: task.notes
-                        }]).then(response=>response.notes)
-                        let tags : any = await getTags(headers)
-                        tags.push({name:"Empty"})
-                        await inquirer.prompt([{
-                            type: 'list',
-                            name: 'tag',
-                            message: "Add tags: ",
-                            choices: tags.map((tag: iTag)=>tag.name)
-                        }]).then(async (response)=>{
-                            if(response.tag != 'Empty'){
-                                let tag = tags.filter((t: iTag)=>t.name == response.tag)[0]
-                                await api.post(`/tasks/${task.id}/tags/${tag.id}`,{},{headers}).catch(err=>console.log(chalk.redBright(err)))
-                            }
-                        })
-                        
-                        await api.put(`/tasks/${task.id}`,task,{headers})
+                        await api.put(`/tasks/${task.id}`,{
+                            text
+                        },{headers})
                             .then(response=>{
-                                console.log(chalk.cyanBright('updated'))
+                                console.log(chalk.cyanBright("Updated"))
                             })
                             .catch(err=>{
                                 console.log(chalk.redBright(err))
                             })
-                        break;
+                    }
+                    if(choice == 'Notes'){
+                        const notes = await inquirer.prompt([{
+                            type: 'string',
+                            name: 'notes',
+                            message: "Type the new task description:",
+                            default: task.notes
+                        }]).then(response=>response.notes)
+                        await api.put(`/tasks/${task.id}`,{
+                            notes
+                        },{headers})
+                            .then(response=>{
+                                console.log(chalk.cyanBright("Updated"))
+                            })
+                            .catch(err=>{
+                                console.log(chalk.redBright(err))
+                            })
+                    }
+                    if(choice == 'Tags'){
+                        console.log(`Existing tags are:${task.tags.map((tag: iTag)=>` ${tag.name}`)}`)
+                        let { choice } = await inquirer.prompt([{
+                            type:'list',
+                            name:'choice',
+                            message: "What do you want to do?",
+                            choices: [
+                                'Add tags',
+                                'Remove tags',
+                                "Exit"
+                            ]
+                        }])
+                        if(choice == "Add"){
+                            let tags : any = await getTags(headers)
+                            tags.push({name:"Empty"})
+                            await inquirer.prompt([{
+                                type: 'list',
+                                name: 'tag',
+                                message: "Please, select the tag to be added",
+                                choices: tags.map((tag: iTag)=>tag.name)
+                            }]).then(async (response)=>{
+                                if(response.tag != 'Empty'){
+                                    let tag = tags.filter((t: iTag)=>t.name == response.tag)[0]
+                                    await api.post(`/tasks/${task.id}/tags/${tag.id}`,{},{headers}).catch(err=>console.log(chalk.redBright(err)))
+                                } else {
+                                    exit()
+                                }
+                            })
+                        }
+                        if(choice == "Remove"){
+                            let tags : Array<iTag> = task.tags
+                            await inquirer.prompt([{
+                                type: 'list',
+                                name: 'tag',
+                                message: "Select tag to remove: ",
+                                choices: tags.map((tag: iTag)=>tag.name)
+                            }]).then(async (response)=>{
+                                if(response.tag != 'Empty'){
+                                    let tag = tags.filter((t: iTag)=>t.name == response.tag)[0]
+                                    await api.delete(`/tasks/${task.id}/tags/${tag.id}`,{headers}).catch(err=>console.log(chalk.redBright(err)))
+                                } else {
+                                    exit()
+                                }
+                            })
+                        }
+                    }
+                    if(choice == 'Add checklist item'){
+                        let text = "1"
+                        while(text){
+                            text = await inquirer.prompt([{
+                                type: 'string',
+                                name: 'text',
+                                message: "Please, type the item text: [leave it empty for exit]",
+                                default: task.text
+                            }]).then(response=>response.text)
+                            await api.post(`/tasks/${task.id}/checklist`,{
+                                text
+                            },{headers})
+                                .then(response=>{
+                                    console.log(chalk.cyanBright("Item included"))
+                                })
+                                .catch(err=>{
+                                    console.log(chalk.redBright(err))
+                                })
+                        }
+                    }
+                    break;
                 case "Close":
                     exit(0)
             }    

@@ -150,7 +150,7 @@ auth.command("stats")
                     })];
             case 2:
                 _a = _b.sent(), party = _a.party, stats = _a.stats, profile = _a.profile, guilds = _a.guilds, challenges = _a.challenges;
-                spinner.succeed("Got it " + profile.name + ", the oracle tolde me!\n");
+                spinner.succeed("Got it " + profile.name + ", the oracle told me!\n");
                 spinner.stop();
                 console.log("Your HP is " + Math.floor(stats.hp) + "/" + stats.maxHealth);
                 _b.label = 3;

@@ -9,16 +9,16 @@ var path_1 = require("path");
 var fs_1 = require("fs");
 var update_notifier_1 = require("update-notifier");
 var auth_1 = __importDefault(require("./commands/auth"));
+var Todos_1 = __importDefault(require("./commands/Todos"));
 var pkg = JSON.parse(fs_1.readFileSync(path_1.resolve(__dirname, '../package.json'), 'utf8'));
 var notifier = new update_notifier_1.UpdateNotifier({ pkg: pkg, shouldNotifyInNpmScript: true });
 notifier.fetchInfo();
 if (notifier.update) {
     console.log("Update available: " + notifier.update.latest);
 }
-// const Todo = require("./commands/Todos");
 var cli = commander_1.default.program;
 cli.addCommand(auth_1.default);
-// program.addCommand(Todo)
+cli.addCommand(Todos_1.default);
 cli
     .version(pkg.version, "-v,--version", "Shows cli version")
     .allowUnknownOption(false)
