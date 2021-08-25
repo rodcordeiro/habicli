@@ -37,15 +37,13 @@
     "configstore": "^5.0.1",
     "figlet": "^1.5.0",
     "inquirer": "^8.1.2",
-    "ora": "^6.0.0",
+    "ora": "^5.4.1",
     "string-width": "^5.0.0",
     "update-notifier": "^5.1.0"
   },
   "devDependencies": {
-    "@types/axios": "0.14.0",
     "@types/inquirer": "7.3.3",
     "@types/node": "16.7.1",
-    "@types/ora": "3.2.0",
     "@types/update-notifier": "5.1.0",
     "ts-node": "10.2.1",
     "typescript": "4.3.5"
