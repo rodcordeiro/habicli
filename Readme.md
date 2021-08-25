@@ -3,8 +3,8 @@
  A CLI for habitica integration
 
 [![Scan code and validate build](https://github.com/rodcordeiro/habicli/actions/workflows/CodeAnalysis.yml/badge.svg)](https://github.com/rodcordeiro/habicli/actions/workflows/CodeAnalysis.yml)
-![NPM Version](https://img.shields.io/npm/v/habicli?style=flat-square)
-![NPM](https://img.shields.io/npm/l/habicli?style=flat-square)
+![NPM Version](https://img.shields.io/npm/v/habicli?color=green)
+![NPM License](https://img.shields.io/npm/l/habicli?style=flat-square)
 
  ### Install
  ```shell
