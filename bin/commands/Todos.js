@@ -175,7 +175,7 @@ function listTasks(headers) {
 }
 var Todo = new commander_1.Command('todo')
     .helpOption("-h,--help", "User functionallity")
-    .description("Todoenticate, show user status and logoff from API")
+    .description("Manage todo tasks.")
     .helpOption("-h,--help", "Login to habitica API")
     .action(function (options) { return __awaiter(void 0, void 0, void 0, function () {
     var headers, tasks, choose_1, task_1, message, action_choices, action, _a, item, item_action, text, data, choice, text, notes, choice_1, tags_1, tags_2, text;

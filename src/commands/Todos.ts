@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer'
 import chalk from 'chalk'
-import { join } from 'path';
+
 import api from '../tools/api';
 import config from '../tools/config';
 import Spinner from '../tools/loader';
@@ -101,7 +101,7 @@ async function listTasks(headers: Object) : Promise<Array<iTask> | Error>{
 }
 const Todo = new Command('todo')
     .helpOption("-h,--help","User functionallity")
-    .description("Todoenticate, show user status and logoff from API")
+    .description("Manage todo tasks.")
     .helpOption("-h,--help","Login to habitica API")
     .action(async(options)=>{
         spinner.start("Asking the oracle for the provisions...\n")
