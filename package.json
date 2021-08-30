@@ -1,6 +1,6 @@
 {
   "name": "habicli",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "description": "A CLI for [Habitica](https://habitica.com/)",
   "main": "./src/cli.js",
   "repository": {
@@ -16,7 +16,8 @@
   "scripts": {
     "start": "node ./bin/cli.js",
     "dev": "npx ts-node ./src/cli.ts",
-    "build": "npx tsc -b"
+    "build": "npx tsc -b",
+    "prepack":  "npm run build"
   },
   "bugs": {
     "url": "https://github.com/rodcordeiro/habicli/issues"
@@ -32,7 +33,7 @@
   ],
   "private": false,
   "author": "Rodrigo Cordeiro <rodrigomendoncca@gmail.com> (https://rodcordeiro.com.br)",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "axios": "^0.21.1",
     "chalk": "^4.1.1",

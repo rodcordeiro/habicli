@@ -5,38 +5,26 @@ import chalk from 'chalk'
 import api from '../tools/api';
 import config from '../tools/config';
 import Spinner from '../tools/loader';
+import { PRIORITIES, ATTRIBUTE, iTag, iChecklistItem } from '../tools/defaults';
 import { exit } from 'process';
 
 const spinner = new Spinner().spinner;
 
 const lineBreak = ()=> console.log('________________________________________________________\n')
 
-enum PRIORITIES{
-    Trivial= 0.1,
-    Easy=1,
-    Medium=1.5,
-    Hard=2
-}
 
 interface iTask{
     text :string
     id ?:string
     notes:string
-    checklist:Array<{
-        id: string;
-        text: string;
-        completed: boolean;
-    }>
+    checklist:Array<iChecklistItem>
     tags: Array<iTag>
     priority?: PRIORITIES
+    attribute: ATTRIBUTE
     completed:boolean
     type: string
 }
 
-interface iTag{
-    id: string;
-    name: string;
-}
 async function complete(id: string | undefined,headers: Object){
     return new Promise(async(resolve,reject)=>{
         await api.post(`/tasks/${id}/score/up`,{},{
@@ -88,7 +76,8 @@ async function listTasks(headers: Object) : Promise<Array<iTask> | Error>{
                         checklist:task.checklist,
                         completed:task.completed,
                         tags:task.tags.map((tag: string)=>uTags.filter((t: iTag)=>t.id == tag)[0]),
-                        type: task.type
+                        type: task.type,
+                        attribute: task.attribute
                     })
                 })
 
@@ -100,9 +89,9 @@ async function listTasks(headers: Object) : Promise<Array<iTask> | Error>{
     })
 }
 const Todo = new Command('todo')
-    .helpOption("-h,--help","User functionallity")
+    .alias('t')
     .description("Manage todo tasks.")
-    .helpOption("-h,--help","Login to habitica API")
+    .helpOption("-h,--help","Provides todo functionallity. Allows to list, edit, update, score, create and delete todo tasks")
     .action(async(options)=>{
         spinner.start("Asking the oracle for the provisions...\n")
         const headers = config.get('api')
@@ -302,7 +291,7 @@ const Todo = new Command('todo')
                                 "Exit"
                             ]
                         }])
-                        if(choice == "Add"){
+                        if(choice == "Add tags"){
                             let tags : any = await getTags(headers)
                             tags.push({name:"Empty"})
                             await inquirer.prompt([{
@@ -319,7 +308,7 @@ const Todo = new Command('todo')
                                 }
                             })
                         }
-                        if(choice == "Remove"){
+                        if(choice == "Remove tags"){
                             let tags : Array<iTag> = task.tags
                             await inquirer.prompt([{
                                 type: 'list',
@@ -411,6 +400,7 @@ const {title} = options.title ? options : await inquirer.prompt([{
     task['text'] = title;
     if(notes) task['notes'] = notes;
     task['priority'] = PRIORITIES[priority]
+    task['attribute'] = ATTRIBUTE['Intelligence']
 
     await api.post('/tasks/user',task,{headers})
         .then(response=>{
@@ -426,4 +416,8 @@ const {title} = options.title ? options : await inquirer.prompt([{
     spinner.stop()
 }
 })
-export default Todo
+export {
+    Todo,
+    iTag,
+    iTask
+}
