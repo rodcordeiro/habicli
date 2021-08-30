@@ -1,5 +1,5 @@
 {
-  "branchPrefix": "Updates/",
+  "branchPrefix": "updates/",
   "packageRules": [
     {
       "updateTypes": ["minor", "patch", "pin", "digest"],
