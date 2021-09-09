@@ -10,7 +10,8 @@ const config = new Configstore(pkg.name,{
     api:{
         "x-client": "c150cf43-bf4a-4c46-8912-9c04f77d3924-cordeiroAPI",
         'Content-Type': 'application/json'
-    }
+    },
+    config:{}
 });
 
 export default config
