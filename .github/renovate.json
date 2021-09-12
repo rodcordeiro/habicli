@@ -12,7 +12,7 @@
                      ],
     "assignAutomerge":  true,
     "assignees":  [
-                      ">rodcordeiro"
+                      "\u003erodcordeiro"
                   ],
     "labels":  [
                    "dependencies"
@@ -24,7 +24,7 @@
                                                "security"
                                            ],
                                 "assignees":  [
-                                                  ">rodcordeiro"
+                                                  "\u003erodcordeiro"
                                               ]
                             },
     "extends":  [
