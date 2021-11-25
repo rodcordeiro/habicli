@@ -139,7 +139,7 @@ const Todo = new Command('todo')
                 "Close"
             ]
             if(task.checklist.length >= 1){
-                action_choices.push("Show checklist")
+                action_choices.push("Checklist")
             }
             
             const action = await inquirer.prompt([{
@@ -152,7 +152,7 @@ const Todo = new Command('todo')
             })
             
             switch(action){
-                case "Show checklist":
+                case "Checklist":
                     const item = await inquirer.prompt([{
                         type: 'list',
                         name: 'item',
@@ -332,17 +332,19 @@ const Todo = new Command('todo')
                                 type: 'string',
                                 name: 'text',
                                 message: "Please, type the item text: [leave it empty for exit]",
-                                default: task.text
+                                default: null
                             }]).then(response=>response.text)
-                            await api.post(`/tasks/${task.id}/checklist`,{
-                                text
-                            },{headers})
-                                .then(response=>{
-                                    console.log(chalk.cyanBright("Item included"))
-                                })
-                                .catch(err=>{
-                                    console.log(chalk.redBright(err))
-                                })
+                            if(text && text != null){
+                                await api.post(`/tasks/${task.id}/checklist`,{
+                                    text
+                                },{headers})
+                                    .then(response=>{
+                                        console.log(chalk.cyanBright("Item included"))
+                                    })
+                                    .catch(err=>{
+                                        console.log(chalk.redBright(err))
+                                    })
+                            }
                         }
                     }
                     break;

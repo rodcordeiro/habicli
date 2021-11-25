@@ -9,6 +9,8 @@ import auth from './commands/auth'
 import {Todo} from './commands/Todos'
 import { Dailies } from './commands/dailies'
 
+import TESTE from './commands/Testes'
+
 const pkg = JSON.parse(readFileSync(resolve(__dirname,'../package.json'),'utf8'))
 
 const notifier = new UpdateNotifier({pkg,shouldNotifyInNpmScript : true})
@@ -23,7 +25,7 @@ cli.addCommand(auth)
 cli.addCommand(Todo)
 cli.addCommand(Dailies)
 
-
+cli.addCommand(TESTE)
 
 cli
     .version(pkg.version,"-v,--version","Shows cli version")
