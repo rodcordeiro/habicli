@@ -1,0 +1,16 @@
+name: Validates PR conflicts
+on: pull_request
+
+jobs:
+  conflibot:
+    name: Validates PR conflicts possibility with conflibot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Warn potential conflicts
+        uses: wktk/conflibot@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          exclude: |
+            yarn.lock
+            **/*.bin
