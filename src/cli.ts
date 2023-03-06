@@ -5,31 +5,33 @@ import { join, resolve } from 'path';
 import { readFileSync } from 'fs';
 import { UpdateNotifier } from 'update-notifier';
 
-import auth from './commands/auth'
-import {Todo} from './commands/Todos'
-import { Dailies } from './commands/dailies'
+import { auth } from './commands/auth';
+import { Todo } from './commands/Todos';
+import { Dailies } from './commands/dailies';
 
-import TESTE from './commands/Testes'
+import TESTE from './commands/Testes';
 
-const pkg = JSON.parse(readFileSync(resolve(__dirname,'../package.json'),'utf8'))
+const pkg = JSON.parse(
+  readFileSync(resolve(__dirname, '../package.json'), 'utf8'),
+);
 
-const notifier = new UpdateNotifier({pkg,shouldNotifyInNpmScript : true})
+const notifier = new UpdateNotifier({ pkg, shouldNotifyInNpmScript: true });
 notifier.fetchInfo();
 if (notifier.update) {
-	console.log(`Update available: ${notifier.update.latest}`);
+  console.log(`Update available: ${notifier.update.latest}`);
 }
 
-const cli = program.program
+const cli = program.program;
 
-cli.addCommand(auth)
-cli.addCommand(Todo)
-cli.addCommand(Dailies)
+cli.addCommand(auth);
+cli.addCommand(Todo);
+cli.addCommand(Dailies);
 
-cli.addCommand(TESTE)
+cli.addCommand(TESTE);
 
 cli
-    .version(pkg.version,"-v,--version","Shows cli version")
-    .allowUnknownOption(false)
-    .allowExcessArguments(false)
+  .version(pkg.version, '-v,--version', 'Shows cli version')
+  .allowUnknownOption(false)
+  .allowExcessArguments(false);
 
 cli.parse(process.argv);

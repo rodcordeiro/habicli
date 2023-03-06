@@ -1,14 +1,14 @@
-import { Command } from "commander";
+import { Command } from 'commander';
 
-import Spinner from "../tools/loader";
+import Spinner from '../utils/loader';
 
-import { Editor } from "../tools/editor";
-import { writeFile, unlink, readFile } from "fs";
-import { watch } from "chokidar";
-import { tmpdir } from "os";
-import { resolve } from "path";
-import { on } from "events";
-import config from "../tools/config";
+import { Editor } from '../utils/editor';
+import { writeFile, unlink, readFile } from 'fs';
+import { watch } from 'chokidar';
+import { tmpdir } from 'os';
+import { resolve } from 'path';
+import { on } from 'events';
+import config from '../utils/config';
 
 interface iStats {
   dev: number;
@@ -35,13 +35,13 @@ let fileStats: iStats,
   runntime: number = 0;
 const editor = new Editor();
 
-const TESTE = new Command("teste");
-TESTE.helpOption("-h,--help", "User functionallity");
-TESTE.description("Authenticate, show user status and logoff from API");
+const TESTE = new Command('teste');
+TESTE.helpOption('-h,--help', 'User functionallity');
+TESTE.description('Authenticate, show user status and logoff from API');
 
 TESTE.action(async (options: any) => {
-  const Name = "rodcordeiro",
-    fileName = Buffer.from(Name).toString("base64"),
+  const Name = 'rodcordeiro',
+    fileName = Buffer.from(Name).toString('base64'),
     tempDir = tmpdir(),
     file = resolve(`${tempDir}/${fileName}.txt`);
 
@@ -66,32 +66,32 @@ TESTE.action(async (options: any) => {
   });
   writeFile(
     file,
-    "",
+    '',
     {
-      encoding: "utf8",
-      flag: "w+",
+      encoding: 'utf8',
+      flag: 'w+',
     },
     async (err) => {
       if (err) throw new Error(`${err}`);
       await editor.create(file);
-    }
+    },
   );
 
-  watcher.on("all", (event: any, path: any, stats: iStats) => {
+  watcher.on('all', (event: any, path: any, stats: iStats) => {
     console.log({ event, stats, runntime });
     if (
-      (event == "add" && runntime === 0) ||
-      (event == "change" && runntime === 0)
+      (event == 'add' && runntime === 0) ||
+      (event == 'change' && runntime === 0)
     ) {
       fileStats = stats;
       runntime++;
-    } else if (event == "change" && stats.size > fileStats.size) {
-      readFile(file, "utf8", (err: any, data: any) => {
+    } else if (event == 'change' && stats.size > fileStats.size) {
+      readFile(file, 'utf8', (err: any, data: any) => {
         console.log(data);
       });
       unlink(file, (err) => {
         if (err) throw err;
-        watcher.close().then(() => console.log("closed"));
+        watcher.close().then(() => console.log('closed'));
         editor.close();
       });
     }
