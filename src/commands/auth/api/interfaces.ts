@@ -8,3 +8,4 @@ export interface iAuthenticated {
   };
   appVersion: string;
 }
+

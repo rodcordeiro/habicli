@@ -20,5 +20,17 @@ export async function create(
   daily: ICreateDailyProps,
   headers: AxiosRequestHeaders & iHeaders,
 ) {
-  
+  return await api
+    .post(
+      '/tasks/user',
+      {
+        ...daily,
+        type: 'daily',
+      },
+      { headers },
+    )
+    .then((response) => response.data)
+    .catch((err) => {
+      throw err;
+    });
 }

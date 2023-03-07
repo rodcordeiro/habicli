@@ -1,6 +1,6 @@
 {
   "name": "habicli",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A CLI for [Habitica](https://habitica.com/)",
   "main": "./src/cli.js",
   "repository": {

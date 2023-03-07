@@ -1,3 +1,4 @@
+import { iAuthenticatedUser } from './authenticated_user';
 
 interface iTag {
   id: string;
@@ -23,4 +24,11 @@ interface iChallenge {
   shortName: string;
 }
 
-export { iChallenge, iChecklistItem, iHeaders, iTag };
+interface iUser {
+  username: string;
+  id: string;
+  profile: iAuthenticatedUser['data']['profile'];
+  stats: iAuthenticatedUser['data']['stats'] & { mainAttr: string };
+}
+
+export { iChallenge, iChecklistItem, iHeaders, iTag, iUser };

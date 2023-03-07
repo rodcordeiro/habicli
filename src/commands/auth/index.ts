@@ -5,11 +5,14 @@ import config from '../../utils/config';
 import Spinner from '../../utils/loader';
 import { authenticate } from './api';
 const spinner = new Spinner().spinner;
+import { Whoami } from './subcommands/whoami';
 
 const auth = new Command('auth');
 
 auth.helpOption('-h,--help', 'User functionallity');
 auth.description('Authenticate, show user status and logoff from API');
+
+auth.addCommand(Whoami);
 
 //Login command
 auth

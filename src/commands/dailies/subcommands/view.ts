@@ -24,46 +24,46 @@ const View = new Command('view')
       if (!headers) {
         unauthorizedMessage(spinner);
         return;
-      } else {
-        const uTags = await getTags(headers);
-        const dailies = await getDailies(headers)
-          .then((response) => {
-            spinner.succeed('Oh, here they are! Please choose one sir.');
-            return renderDailies(response.data, uTags.data);
-          })
-          .catch((err: Error) => {
-            throw err;
-          });
-        spinner.stop();
-        const choose = await inquirer.prompt([
-          {
-            type: 'list',
-            name: 'daily',
-            message: 'Choose a task',
-            choices: dailies.map((daily) => {
-              return daily.text;
-            }),
-          },
-        ]);
-
-        const daily = dailies.find(
-          (daily: iDailys) => daily.text == choose.daily,
-        );
-        // console.log(daily);
-        let message = `  ### ${daily?.text} ###`;
-        if (daily?.notes) message += `\n ${daily.notes}`;
-
-        lineBreak();
-        console.log(chalk.cyanBright(message));
-        if (daily?.checklist) {
-          console.log('\n Checklist items:');
-          daily.checklist.map((item) => {
-            console.log(`   [${item.completed ? 'x' : ' '}] ${item.text}`);
-          });
-        }
-        lineBreak();
-        process.exit();
       }
+
+      const uTags = await getTags(headers);
+      const dailies = await getDailies(headers)
+        .then((response) => {
+          spinner.succeed('Oh, here they are! Please choose one sir.');
+          return renderDailies(response.data, uTags.data);
+        })
+        .catch((err: Error) => {
+          throw err;
+        });
+      spinner.stop();
+      const choose = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'daily',
+          message: 'Choose a task',
+          choices: dailies.map((daily) => {
+            return daily.text;
+          }),
+        },
+      ]);
+
+      const daily = dailies.find(
+        (daily: iDailys) => daily.text == choose.daily,
+      );
+      // console.log(daily);
+      let message = `  ### ${daily?.text} ###`;
+      if (daily?.notes) message += `\n ${daily.notes}`;
+
+      lineBreak();
+      console.log(chalk.cyanBright(message));
+      if (daily?.checklist) {
+        console.log('\n Checklist items:');
+        daily.checklist.map((item) => {
+          console.log(`   [${item.completed ? 'x' : ' '}] ${item.text}`);
+        });
+      }
+      lineBreak();
+      process.exit();
     } catch (error) {
       spinner.fail(`Oh no. got error: ${error}`);
       spinner.stop();

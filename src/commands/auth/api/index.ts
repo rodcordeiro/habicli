@@ -1,4 +1,5 @@
-import { AxiosResponse } from 'axios';
+import { AxiosRequestHeaders, AxiosResponse } from 'axios';
+import { iAuthenticatedUser, iHeaders } from '../../../utils';
 import api from '../../../utils/api';
 import { iAuthenticated } from './interfaces';
 
@@ -16,4 +17,15 @@ const authenticate = async (username: string, password: string) => {
     });
 };
 
-export { authenticate };
+const getAuthenticatedUser = async (
+  headers: AxiosRequestHeaders & iHeaders,
+) => {
+  return await api
+    .get<iAuthenticatedUser>('/user', { headers })
+    .then((res) => res.data)
+    .catch((err) => {
+      throw err;
+    });
+};
+
+export { authenticate, getAuthenticatedUser };
