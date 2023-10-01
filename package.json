@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@types/inquirer": "8.2.6",
-    "@types/node": "16.18.46",
+    "@types/node": "16.18.55",
     "@types/update-notifier": "5.1.0",
     "auto-changelog": "2.4.0",
     "jest": "27.4.5",
