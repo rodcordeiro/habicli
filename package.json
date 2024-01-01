@@ -55,7 +55,7 @@
     "@types/node": "16.18.69",
     "@types/update-notifier": "5.1.0",
     "auto-changelog": "2.4.0",
-    "jest": "27.4.5",
+    "jest": "27.5.1",
     "rimraf": "3.0.2",
     "ts-jest": "27.1.5",
     "ts-node": "10.4.0",
