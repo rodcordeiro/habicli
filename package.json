@@ -54,7 +54,7 @@
     "@types/inquirer": "8.2.10",
     "@types/node": "16.18.112",
     "@types/update-notifier": "5.1.0",
-    "auto-changelog": "2.4.0",
+    "auto-changelog": "2.5.0",
     "jest": "27.5.1",
     "rimraf": "3.0.2",
     "ts-jest": "27.1.5",
