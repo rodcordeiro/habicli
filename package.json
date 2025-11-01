@@ -51,7 +51,7 @@
     "update-notifier": "^5.1.0"
   },
   "devDependencies": {
-    "@types/inquirer": "8.2.11",
+    "@types/inquirer": "8.2.12",
     "@types/node": "16.18.126",
     "@types/update-notifier": "5.1.0",
     "auto-changelog": "2.5.0",
