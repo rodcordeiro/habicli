@@ -53,7 +53,7 @@
   "devDependencies": {
     "@types/inquirer": "8.2.12",
     "@types/node": "16.18.126",
-    "@types/update-notifier": "5.1.0",
+    "@types/update-notifier": "6.0.8",
     "auto-changelog": "2.5.0",
     "jest": "27.5.1",
     "rimraf": "3.0.2",
